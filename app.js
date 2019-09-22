@@ -7,7 +7,7 @@ app.get('/',function(req, res) {
 });
 app.use('/client',express.static(__dirname + '/client'));
  
-serv.listen(2000);
+serv.listen(process.env.PORT);
 console.log("Server started.");
 
 //string constants for string emmision

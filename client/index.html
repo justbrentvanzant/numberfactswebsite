@@ -1,0 +1,103 @@
+<head>
+    <title>NumberFactsLive</title>
+    <style>
+        html, body {
+        text-align: center;
+        }
+        p {text-align: left;}
+
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: justify;
+            font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
+            font-size: 13px;
+            color: #8e8d8a;
+            background-color: #EAE7DC;
+        }
+        input[type="text"]
+        {
+            background: transparent;
+            color: #8e8d8a;
+            border:  2px solid #e85a4f;
+        }
+        .centering {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+         .title {
+          position: fixed;
+          top: 25%;
+          left: 50%;
+          transform: translate(-25%, -50%);
+          font-size: 26px; 
+          text-align: center;
+        }
+        ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+        border-radius: 10px;
+        width: 2px;
+        border: 1px solid #e85a4f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+        background: #e85a4f; 
+        border-radius: 1x;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+        background: #EAE7DC;  
+        }
+    </style>
+</head>
+<body>    <div class="centering">
+        <div id="welcome-text" style="width:500px; font-size: 16px; text-align: center"> 
+          <div>Welcome to <span style="font-size: 26px;"> Number Facts Live</div>
+            <div>Type "/number" to get facts about a random number!</div>
+            <div>The server will also provide random facts every 20 seconds.</div>
+            <br>
+            <div id ="online-count">Online: 0</div>
+        </div>
+        <div id="chat-text" class="scrollStyle" style="width:550px;height:300px;overflow-y:scroll">
+  
+        </div>
+        <form id="chat-form">
+            <input id="chat-input" type="text" style="width:550px"></input>
+        </form>
+        <div id="sources" style="font-size: 10px; text-align: center">Made with <a href="http://numbersapi.com">numbersapi.com</a></div>
+    </div>
+</body>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+    var chatText = document.getElementById('chat-text');
+    var chatInput = document.getElementById('chat-input');
+    var chatForm = document.getElementById('chat-form');
+    var onlineCount = document.getElementById('online-count');
+    var socket = io();
+       
+    socket.on('addToChat',function(data){
+        chatText.innerHTML += '<div>' + data + '</div>';
+    });
+    socket.on('playerCount',function(data){
+        console.log("in here");
+        onlineCount.innerHTML = '<div>' + "Online: " + data + '</div>';
+    });
+    socket.on('playerNumber',function(data){
+        chatText.innerHTML += '<div>' + "You are number "+ data +"." + '</div>';
+    });
+    chatForm.onsubmit = function(e){
+        e.preventDefault();
+        if(chatInput.value[0] === '/')
+            socket.emit('sendCmdToServer',chatInput.value.slice(1));
+        else
+            socket.emit('sendMsgToServer',chatInput.value);
+        chatInput.value = '';      
+    }
+   
+</script>

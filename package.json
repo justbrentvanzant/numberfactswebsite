@@ -4,12 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-     "start": "node app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "node-fetch": "^2.6.0",
     "socket.io": "^2.3.0"
   }
